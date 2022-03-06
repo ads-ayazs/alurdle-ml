@@ -12,6 +12,10 @@ setup:
 	@$(PIPENV) install
 .PHONY:setup
 
+setup-dev:
+	@$(PIPENV) install --dev
+.PHONY:setup
+
 # Run the app
 run: setup
 	@$(PIPENV) run $(PYTHON) $(PY_RUN)
