@@ -26,9 +26,28 @@ run: setup
 	@$(PIPENV) run $(PYTHON) $(PY_RUN)
 .PHONY:run
 
-# Clean the app and remove the venv
-clean:
+# Clean up
+clean-app:
+	@echo "Cleaning app..."
 	@rm -rf __pycache__
-	@$(PIPENV) --rm
+.PHONY:clean-app
+
+clean-env: guard-PIPENV_ACTIVE
+	@echo "Cleaning pipenv..."
+	@rm -rf __pycache__
+	-@$(PIPENV) --rm
+.PHONY:clean-env
+
+clean-test:
+	@echo "Cleaning pytest..."
+	@rm -rf .pytest_cache
+.PHONY:clean-test
+
+clean: clean-test clean-app clean-env
 .PHONY:clean
 
+# Protect against running from inside pipenv shell
+guard-PIPENV_ACTIVE:
+	@ if [ "${PIPENV_ACTIVE}" != "" ]; then \
+		echo "Exit pipenv shell before running make clean" && exit 1; \
+	fi
