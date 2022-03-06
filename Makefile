@@ -7,7 +7,7 @@ PIPENV := pipenv
 PYTHON := python3
 
 
-# Create and activate the venv
+# Setup the virtual env
 setup:
 	@$(PIPENV) install
 .PHONY:setup
@@ -15,6 +15,11 @@ setup:
 setup-dev:
 	@$(PIPENV) install --dev
 .PHONY:setup
+
+# Run tests
+test: setup-dev
+	@$(PIPENV) run pytest
+.PHONY:test
 
 # Run the app
 run: setup
