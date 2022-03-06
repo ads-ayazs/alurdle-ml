@@ -45,7 +45,7 @@ def player_game_dyndb_to_s3(
     return out_files
 
   # Get the DynDB table
-  tbl = wr.dynamodb.get_table(table_name=DYNDB_TABLE_NAME)
+  tbl = wr.dynamodb.get_table(table_name=table_name)
   if tbl.item_count < 1:
     return out_files
 
