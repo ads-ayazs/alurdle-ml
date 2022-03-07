@@ -5,9 +5,12 @@ name = "pypi"
 
 [packages]
 awswrangler = "*"
+sklearn = "*"
 
 [dev-packages]
 pytest = "*"
+ipykernel = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.9"
