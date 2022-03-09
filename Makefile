@@ -21,6 +21,10 @@ test: setup-dev
 	@$(PIPENV) run pytest
 .PHONY:test
 
+# Serve the api
+api: setup
+.PHONY:api
+
 # Run the app
 run: setup
 	@$(PIPENV) run $(PYTHON) $(PY_RUN)
