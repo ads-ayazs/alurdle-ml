@@ -8,26 +8,19 @@ DYNDB_TABLE_NAME = 'PlayerGame'
 DYNDB_TABLE_ATTRIBUTES = ['turns', 'gameId']
 DYNDB_SCAN_LIMIT=1000
 
-S3_BUCKET_PATH="s3://ads-datasets/wordle-player"
-S3_FLD_CSV="flat"
-S3_FLD_PQT="parquet"
-
-FILENAME_GAMETURNS_CSV = "game-turns.csv"
-FILENAME_GAMETURNS_PQT = "game-turns.parquet"
-FILENAME_VALIDWORDATTEMPTS_CSV = "valid-word-attempts.csv"
-FILENAME_VALIDWORDATTEMPTS_PQT = "valid-word-attempts.parquet"
+S3_BUCKET_PATH="s3://ads-datasets/wordle-player/parquet"
+FILENAME_GAMETURNS_PQT = "game-turns/game-turns.parquet"
+FILENAME_VALIDWORDATTEMPTS_PQT = "valid-word-attempts/valid-word-attempts.parquet"
 
 
 def player_game_dyndb_to_s3(
   table_name=DYNDB_TABLE_NAME, 
-  attr_list=DYNDB_TABLE_ATTRIBUTES,
   out_bucket_path = S3_BUCKET_PATH):
 
   """Flatten PlayerGame JSON data from DynamoDB into CSV and parquet on S3.
 
   Args:
       table_name(str): Source table name in DynamoDB.
-      attr_list(array of str): Names of attributes to select from the source table.
       out_bucket_path: Path to the S3 bucket where output files will be written.
 
   Returns:
@@ -35,11 +28,10 @@ def player_game_dyndb_to_s3(
   """
 
   out_files = []
+  attr_list=DYNDB_TABLE_ATTRIBUTES
 
   # Validate input variables
   if not table_name:
-    return out_files
-  if not attr_list:
     return out_files
   if not out_bucket_path:
     return out_files
@@ -65,11 +57,7 @@ def player_game_dyndb_to_s3(
 
   # Write the turn data to s3
   try:
-    s3_file_path = os.path.join(out_bucket_path, S3_FLD_CSV, FILENAME_GAMETURNS_CSV)
-    result = wr.s3.to_csv(df, s3_file_path, index=False)
-    out_files.extend(result['paths'])
-
-    s3_file_path = os.path.join(out_bucket_path, S3_FLD_PQT, FILENAME_GAMETURNS_PQT)
+    s3_file_path = os.path.join(out_bucket_path, FILENAME_GAMETURNS_PQT)
     result = wr.s3.to_parquet(df, s3_file_path)
     out_files.extend(result['paths'])
   except:
@@ -81,11 +69,7 @@ def player_game_dyndb_to_s3(
 
   # Write the turn data to s3
   try:
-    s3_file_path = os.path.join(out_bucket_path, S3_FLD_CSV, FILENAME_VALIDWORDATTEMPTS_CSV)
-    result = wr.s3.to_csv(df, s3_file_path, index=False)
-    out_files.extend(result['paths'])
-
-    s3_file_path = os.path.join(out_bucket_path, S3_FLD_PQT, FILENAME_VALIDWORDATTEMPTS_PQT)
+    s3_file_path = os.path.join(out_bucket_path, FILENAME_VALIDWORDATTEMPTS_PQT)
     result = wr.s3.to_parquet(df, s3_file_path)
     out_files.extend(result['paths'])
   except:
